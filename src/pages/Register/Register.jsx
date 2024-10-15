@@ -1,17 +1,45 @@
-import {
-  Container,
-  Box,
-  TextField,
-  Button,
-  Typography,
-  Divider,
-} from '@mui/material';
+import { Container,Box,TextField,Button,Typography,Divider,} from '@mui/material';
 import { Link } from 'react-router-dom';
-import React from 'react'
+import axios from 'axios';
+import React,{useState} from 'react'
 import { Google } from '@mui/icons-material';
+import Toast from '../../components/Toast/Toast';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 export default function Register() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const navigate = useNavigate();
+
+  const apiUrl = import.meta.env.VITE_API_URL
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (password !== confirmPassword) {
+      toast.warning("Password is wrong")
+      return;
+    }
+
+    try {
+      const response = await axios.post(`${apiUrl}/auth/register`, {
+        email,
+        password,
+      });
+      if (response.status === 200) {
+        toast.success("Registration successful!");
+        setTimeout(() => {
+          navigate('/login');
+        }, 1000);
+      }
+    } catch (error) {
+      toast.error("Registration failed")
+    }
+  };
+  
   return (
     <Box sx={{backgroundColor:'#555',height:'100vh'}}>
+        <Toast/>
         <Container maxWidth="xs">
       <Box
         sx={{
@@ -29,7 +57,7 @@ export default function Register() {
         component="h1" variant="h5">
           Register
         </Typography>
-        <Box component="form" noValidate sx={{ mt: 1 }}>
+        <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={handleSubmit}>
           <TextField
             sx={{
               '& .MuiOutlinedInput-root': {
@@ -61,6 +89,8 @@ export default function Register() {
             name="email"
             autoComplete="email"
             autoFocus
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <TextField
           sx={{
@@ -93,6 +123,8 @@ export default function Register() {
             label="CreatePassword"
             type="password"
             autoComplete="new-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <TextField
           sx={{
@@ -125,6 +157,8 @@ export default function Register() {
             label="Confirm Password"
             type="password"
             autoComplete="new-password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
           <Button
             type="submit"
