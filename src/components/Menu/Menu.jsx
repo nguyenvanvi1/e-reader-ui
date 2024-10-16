@@ -12,9 +12,9 @@ import RestoreIcon from '@mui/icons-material/Restore';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import Profile from '../Profile/Profile';
 
 export default function Menu() {
     const VisuallyHiddenInput = styled('input')({
@@ -91,9 +91,9 @@ export default function Menu() {
                         <Box><Typography sx={{color:'white',fontSize:'16px',paddingLeft:'20px'}}>Date</Typography></Box>
                         <Box
                         sx={{
-                                height: '1px',          // Độ dày
-                                backgroundColor: 'white', // Màu đen
-                                width: '100%',          // Chiều rộng toàn bộ
+                                height: '1px',         
+                                backgroundColor: 'white', 
+                                width: '100%',          
                         }}
                         />
                         <Box><Typography sx={{color:'white',fontSize:'16px',paddingLeft:'20px'}}>Ascend</Typography></Box>
@@ -173,6 +173,7 @@ export default function Menu() {
                     />
                 </Button>
             </Box>
+            <Profile/>
         </Box>
         <Container/>
     </Box>
