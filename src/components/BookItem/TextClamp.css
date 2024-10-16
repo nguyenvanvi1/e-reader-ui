@@ -1,0 +1,10 @@
+.clamped-text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 3; /* Số dòng muốn hiển thị */
+    line-height: 1.5em; /* Chiều cao của mỗi dòng */
+    max-height: 4.5em; /* line-height * số dòng */
+    text-overflow: ellipsis;
+    color: white;
+  }
