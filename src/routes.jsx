@@ -17,18 +17,18 @@ const router = createBrowserRouter([
     element: <Favorite />,
   },
   {
-    path:"/login",
-    element:<Login/>
+    path: "/login",
+    element: <Login />,
   },
   {
-    path:"/register",
-    element:<Register/>
+    path: "/register",
+    element: <Register />,
   },
   // This route to test the redux counter
   {
-    path:"counter",
+    path: "counter",
     element: <Counter />,
-  }
+  },
 ]);
 
 export default router;
