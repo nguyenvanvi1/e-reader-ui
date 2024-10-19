@@ -1,193 +1,174 @@
-import { Container,Box,TextField,Button,Typography,Divider,} from '@mui/material';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import React,{useState} from 'react'
-import { Google } from '@mui/icons-material';
-import Toast from '../../components/Toast/Toast';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
+import CssBaseline from "@mui/material/CssBaseline";
+import Divider from "@mui/material/Divider";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
+import FormControl from "@mui/material/FormControl";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
+import MuiCard from "@mui/material/Card";
+import { createTheme, styled } from "@mui/material/styles";
+import GoogleIcon from "../../components/GoogleIcon/GoogleIcon";
+import FacebookIcon from "../../components/FacebookIcon/FacebookIcon";
+import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { useGoogleLogin } from "@react-oauth/google";
+
+const Card = styled(MuiCard)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  alignSelf: "center",
+  width: "100%",
+  padding: theme.spacing(4),
+  gap: theme.spacing(2),
+  margin: "auto",
+  boxShadow:
+    "hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px",
+  [theme.breakpoints.up("sm")]: {
+    width: "450px",
+  },
+  ...theme.applyStyles("dark", {
+    boxShadow:
+      "hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px",
+  }),
+}));
+
+const RegisterContainer = styled(Stack)(({ theme }) => ({
+  minHeight: "100%",
+  padding: theme.spacing(2),
+  [theme.breakpoints.up("sm")]: {
+    padding: theme.spacing(4),
+  },
+  backgroundImage:
+    "radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))",
+  backgroundRepeat: "no-repeat",
+  ...theme.applyStyles("dark", {
+    backgroundImage:
+      "radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))",
+  }),
+}));
+
 export default function Register() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const navigate = useNavigate();
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
+  const loginWithGoogle = useGoogleLogin({
+    onSuccess: (tokenResponse) => console.log(tokenResponse),
+  });
 
-  const apiUrl = import.meta.env.VITE_API_URL
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (password !== confirmPassword) {
-      toast.warning("Password is wrong")
-      return;
-    }
-
-    try {
-      const response = await axios.post(`${apiUrl}/auth/register`, {
-        email,
-        password,
-      });
-      if (response.status === 200) {
-        toast.success("Registration successful!");
-        setTimeout(() => {
-          navigate('/login');
-        }, 1000);
-      }
-    } catch (error) {
-      toast.error("Registration failed")
-    }
+  const handleClickLoginWithGoogle = () => {
+    loginWithGoogle();
   };
-  
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+
   return (
-    <Box sx={{backgroundColor:'#555',height:'100vh'}}>
-        <Toast/>
-        <Container maxWidth="xs">
-      <Box
-        sx={{
-          padding: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Typography sx={{
-            fontSize:'30px',
-            color:'white'
-        }}
-        
-        component="h1" variant="h5">
-          Register
-        </Typography>
-        <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={handleSubmit}>
-          <TextField
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: 'white', // Màu viền
-                },
-                '&:hover fieldset': {
-                  borderColor: 'white', // Màu viền khi hover
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: 'white', // Màu viền khi focus
-                },
-              },
-              '& .MuiInputLabel-root': {
-                color: 'white', // Màu của label
-              },
-              '& .MuiInputLabel-root.Mui-focused': {
-                color: 'white', // Màu của label khi focus
-              },
-              '& .MuiOutlinedInput-input': {
-                color: 'white', // Màu của văn bản bên trong
-                backgroundColor: '#555', // Màu nền
-              },
-            }}
-            margin="normal"
-            required
-            fullWidth
-            label="Email"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <TextField
-          sx={{
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': {
-                borderColor: 'white', // Màu viền
-              },
-              '&:hover fieldset': {
-                borderColor: 'white', // Màu viền khi hover
-              },
-              '&.Mui-focused fieldset': {
-                borderColor: 'white', // Màu viền khi focus
-              },
-            },
-            '& .MuiInputLabel-root': {
-              color: 'white', // Màu của label
-            },
-            '& .MuiInputLabel-root.Mui-focused': {
-              color: 'white', // Màu của label khi focus
-            },
-            '& .MuiOutlinedInput-input': {
-              color: 'white', // Màu của văn bản bên trong
-              backgroundColor: '#555', // Màu nền
-            },
-          }}
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="CreatePassword"
-            type="password"
-            autoComplete="new-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <TextField
-          sx={{
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': {
-                borderColor: 'white', // Màu viền
-              },
-              '&:hover fieldset': {
-                borderColor: 'white', // Màu viền khi hover
-              },
-              '&.Mui-focused fieldset': {
-                borderColor: 'white', // Màu viền khi focus
-              },
-            },
-            '& .MuiInputLabel-root': {
-              color: 'white', // Màu của label
-            },
-            '& .MuiInputLabel-root.Mui-focused': {
-              color: 'white', // Màu của label khi focus
-            },
-            '& .MuiOutlinedInput-input': {
-              color: 'white', // Màu của văn bản bên trong
-              backgroundColor: '#555', // Màu nền
-            },
-          }}
-            margin="normal"
-            required
-            fullWidth
-            name="confirmPassword"
-            label="Confirm Password"
-            type="password"
-            autoComplete="new-password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+    <>
+      <RegisterContainer direction="column" justifyContent="space-between">
+        <Card variant="outlined">
+          <GoogleIcon />
+          <Typography
+            component="h1"
+            variant="h4"
+            sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
           >
             Register
-          </Button>
-          <Box display="flex" justifyContent="center">
-            <Typography variant="body2" color='white' marginTop='3px'>Already have an account?&nbsp;</Typography>
-            <Link to="/login" variant="body2">
-              <Typography sx={{color:'white',textDecoration:'none'}}>Login</Typography>
-            </Link>
+          </Typography>
+          <Box
+            component="form"
+            onSubmit={handleSubmit(onSubmit)}
+            sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+          >
+            <FormControl>
+              <FormLabel htmlFor="name">Full name</FormLabel>
+              <TextField
+                autoComplete="name"
+                name="name"
+                fullWidth
+                id="name"
+                placeholder="Jon Snow"
+                {...register("name", { required: "Name is required" })}
+                error={errors.name}
+                helperText={errors.name?.message}
+                color={errors.name ? "error" : "primary"}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="email">Email</FormLabel>
+              <TextField
+                fullWidth
+                id="email"
+                placeholder="your@email.com"
+                name="email"
+                autoComplete="email"
+                variant="outlined"
+                {...register("email", { required: "Email is required" })}
+                error={errors.email}
+                helperText={errors.email?.message}
+                color={errors.email ? "error" : "primary.dark"}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="password">Password</FormLabel>
+              <TextField
+                fullWidth
+                name="password"
+                placeholder="••••••"
+                type="password"
+                id="password"
+                autoComplete="new-password"
+                variant="outlined"
+                {...register("password", { required: "Password is required" })}
+                error={errors.password}
+                helperText={errors.password?.message}
+                color={errors.password ? "error" : "primary"}
+              />
+            </FormControl>
+            <FormControlLabel
+              control={<Checkbox value="allowExtraEmails" color="primary" />}
+              label="I want to receive updates via email."
+            />
+            <Button type="submit" fullWidth variant="contained">
+              Register
+            </Button>
+            <Typography sx={{ textAlign: "center" }}>
+              Already have an account?{" "}
+              <span>
+                <Link to="/login">Login</Link>
+              </span>
+            </Typography>
           </Box>
-          <Divider sx={{ my: 2 }}>Or</Divider>
-          <Box display="flex" justifyContent="space-between">
+          <Divider>
+            <Typography sx={{ color: "text.secondary" }}>or</Typography>
+          </Divider>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <Button
-              variant="contained"
-              startIcon={<Google />}
               fullWidth
-              sx={{ ml: 1, backgroundColor: '#db4a39', color: 'white' }}
+              variant="outlined"
+              onClick={handleClickLoginWithGoogle}
+              startIcon={<GoogleIcon />}
             >
-              Login with Google
+              Regsiter with Google
+            </Button>
+            <Button
+              fullWidth
+              variant="outlined"
+              onClick={() => alert("Regsiter with Facebook")}
+              startIcon={<FacebookIcon />}
+            >
+              Regsiter with Facebook
             </Button>
           </Box>
-        </Box>
-      </Box>
-    </Container>
-    </Box>
-  )
+        </Card>
+      </RegisterContainer>
+    </>
+  );
 }
