@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 
+
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -68,7 +69,7 @@ export default function Login(props) {
   } = useForm();
   const [isOpenForgotPassword, setIsOpenForgotPassword] = useState(false);
   const loginWithGoogle = useGoogleLogin({
-    onSuccess: (tokenResponse) => console.log(tokenResponse),
+    onSuccess: (tokenResponse) => console.log(tokenResponse.access_token),
   });
 
   const handleClickLoginWithGoogle = () => {

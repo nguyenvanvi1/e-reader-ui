@@ -9,10 +9,11 @@ import { CssBaseline } from "@mui/material";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
   return (
     <ThemeProvider theme={lightTheme}>
       <CssBaseline />
-      <GoogleOAuthProvider clientId="949967426369-s1qo0durfms7dlh83p485pkga8l8oj0v.apps.googleusercontent.com">
+      <GoogleOAuthProvider clientId={clientId}>
         <Provider store={store}>
           <RouterProvider router={router} />;
         </Provider>
