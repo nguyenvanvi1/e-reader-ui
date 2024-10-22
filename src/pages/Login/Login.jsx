@@ -17,7 +17,7 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
-
+import { loginUser} from '../../services/auth';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -84,8 +84,13 @@ export default function Login(props) {
     setIsOpenForgotPassword(false);
   };
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => { 
+    try {
+      const response = await loginUser(data); // Gọi API đăng nhập
+      console.log('User logged in:', response);
+  } catch (error) {
+    setError(error.message); // Set error message nếu có lỗi
+  }
   };
 
   return (

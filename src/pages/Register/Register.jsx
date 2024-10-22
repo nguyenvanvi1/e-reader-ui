@@ -17,7 +17,7 @@ import FacebookIcon from "../../components/FacebookIcon/FacebookIcon";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useGoogleLogin } from "@react-oauth/google";
-
+import { registerUser} from '../../services/auth';
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -66,8 +66,13 @@ export default function Register() {
     loginWithGoogle();
   };
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+        const response = await registerUser(data); // Gọi API đăng nhập
+        console.log('User logged in:', response);
+    } catch (error) {
+      setError(error.message); // Set error message nếu có lỗi
+    }
   };
 
   return (

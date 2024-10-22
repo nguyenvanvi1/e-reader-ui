@@ -1,16 +1,21 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter,Navigate } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Error from "./pages/Error/Error";
 import Favorite from "./pages/Favorite/Favorite";
 import Counter from "./pages/Counter/Counter";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
+import LandingPage from "./pages/LandingPage/LandingPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <Navigate to="/marketing" replace />,
     errorElement: <Error />,
+  },
+  {
+    path: "/home",
+    element: <Home />,
   },
   {
     path: "/favorite",
@@ -28,6 +33,10 @@ const router = createBrowserRouter([
   {
     path: "counter",
     element: <Counter />,
+  },
+  {
+    path: "/marketing",
+    element: <LandingPage/>,
   },
 ]);
 

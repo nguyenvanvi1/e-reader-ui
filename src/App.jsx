@@ -15,7 +15,7 @@ function App() {
       <CssBaseline />
       <GoogleOAuthProvider clientId={clientId}>
         <Provider store={store}>
-          <RouterProvider router={router} />;
+          <RouterProvider router={router} />
         </Provider>
       </GoogleOAuthProvider>
     </ThemeProvider>
