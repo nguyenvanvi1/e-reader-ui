@@ -13,11 +13,12 @@ import { styled } from "@mui/material/styles";
 import GoogleIcon from "../../components/GoogleIcon/GoogleIcon";
 import ForgotPassword from "./components/ForgotPassword";
 import FacebookIcon from "../../components/FacebookIcon/FacebookIcon";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
-import { loginUser} from '../../services/auth';
+import { login } from "../../services/auth";
+import { toast } from "react-toastify";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -67,6 +68,7 @@ export default function Login(props) {
     watch,
     formState: { errors },
   } = useForm();
+  const navigate = useNavigate();
   const [isOpenForgotPassword, setIsOpenForgotPassword] = useState(false);
   const loginWithGoogle = useGoogleLogin({
     onSuccess: (tokenResponse) => console.log(tokenResponse.access_token),
@@ -84,13 +86,12 @@ export default function Login(props) {
     setIsOpenForgotPassword(false);
   };
 
-  const onSubmit = async (data) => { 
+  const onSubmit = async (data) => {
     try {
-      const response = await loginUser(data); // Gọi API đăng nhập
-      console.log('User logged in:', response);
-  } catch (error) {
-    setError(error.message); // Set error message nếu có lỗi
-  }
+      const response = await login(data.email, data.password);
+      toast.success(response?.message);
+      navigate("/home");
+    } catch (error) {}
   };
 
   return (

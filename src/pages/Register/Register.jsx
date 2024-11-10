@@ -2,7 +2,6 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
-import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
@@ -11,13 +10,14 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import MuiCard from "@mui/material/Card";
-import { createTheme, styled } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import GoogleIcon from "../../components/GoogleIcon/GoogleIcon";
 import FacebookIcon from "../../components/FacebookIcon/FacebookIcon";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { register as registerAPI } from "../../services/auth";
 import { useGoogleLogin } from "@react-oauth/google";
-import { registerUser} from '../../services/auth';
+import { toast } from "react-toastify";
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -56,8 +56,11 @@ export default function Register() {
   const {
     register,
     formState: { errors },
+    watch,
     handleSubmit,
   } = useForm();
+  const navigate = useNavigate();
+  const password = watch("password", "");
   const loginWithGoogle = useGoogleLogin({
     onSuccess: (tokenResponse) => console.log(tokenResponse),
   });
@@ -68,11 +71,10 @@ export default function Register() {
 
   const onSubmit = async (data) => {
     try {
-        const response = await registerUser(data); // Gọi API đăng nhập
-        console.log('User logged in:', response);
-    } catch (error) {
-      setError(error.message); // Set error message nếu có lỗi
-    }
+      const response = await registerAPI(data.email, data.password);
+      toast.success(response.message);
+      navigate("/login");
+    } catch (error) {}
   };
 
   return (
@@ -92,20 +94,6 @@ export default function Register() {
             onSubmit={handleSubmit(onSubmit)}
             sx={{ display: "flex", flexDirection: "column", gap: 2 }}
           >
-            <FormControl>
-              <FormLabel htmlFor="name">Full name</FormLabel>
-              <TextField
-                autoComplete="name"
-                name="name"
-                fullWidth
-                id="name"
-                placeholder="Jon Snow"
-                {...register("name", { required: "Name is required" })}
-                error={errors.name}
-                helperText={errors.name?.message}
-                color={errors.name ? "error" : "primary"}
-              />
-            </FormControl>
             <FormControl>
               <FormLabel htmlFor="email">Email</FormLabel>
               <TextField
@@ -131,9 +119,35 @@ export default function Register() {
                 id="password"
                 autoComplete="new-password"
                 variant="outlined"
-                {...register("password", { required: "Password is required" })}
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters",
+                  },
+                })}
                 error={errors.password}
                 helperText={errors.password?.message}
+                color={errors.password ? "error" : "primary"}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="password">Confirm Password</FormLabel>
+              <TextField
+                fullWidth
+                name="confirmPassword"
+                placeholder="••••••"
+                type="password"
+                id="confirmPassword"
+                autoComplete="new-password"
+                variant="outlined"
+                {...register("confirmPassword", {
+                  required: "Confirm Password is required",
+                  validate: (value) =>
+                    value === password || "Passwords do not match",
+                })}
+                error={errors.confirmPassword}
+                helperText={errors.confirmPassword?.message}
                 color={errors.password ? "error" : "primary"}
               />
             </FormControl>
