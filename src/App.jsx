@@ -7,6 +7,7 @@ import { darkTheme, lightTheme } from "./theme";
 import { store } from "./store";
 import { CssBaseline } from "@mui/material";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import Toast from "./components/Toast/Toast";
 
 function App() {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -16,6 +17,7 @@ function App() {
       <GoogleOAuthProvider clientId={clientId}>
         <Provider store={store}>
           <RouterProvider router={router} />
+          <Toast />
         </Provider>
       </GoogleOAuthProvider>
     </ThemeProvider>
